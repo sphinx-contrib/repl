@@ -4,15 +4,15 @@ sphinxcontrib-repl - Sphinx directives to auto-evaluate Python code-blocks
 
 The ``sphinxcontrib-repl`` directives automatically run their content line-by-line in 
 Python REPL interpreter during during Sphinx builds the host reStructuredText files. 
-The code-blocks are then replaced by the ``doctest`` blocks containing the input/output 
+The code-blocks are then replaced by ``doctest`` blocks containing the input/output 
 lines as appear in the interpreter.
 
 --------
 Contents
 --------
 
- - `Installation <Installation_>`_
- - `Basic usage <Basic Usage_>`_
+- `Installation <Installation_>`_
+- `Basic usage <Basic Usage_>`_
 
 ------------
 Installation
@@ -59,8 +59,10 @@ This block will produce the following document block:
    >>> f"{x=}"
    'x=5'
 
-One interpreter process will run continuously for each rST document. Hence, the 
-variables will carry between blocks. For example, proceeding the above example,
+After the first ``repl`` block, a dedicated Python interpreter process will run 
+in the background continuously for each rST document until the document is fully
+parsed. Hence, the variables will carry between blocks. For example, after 
+the above example, the variable ``x`` may be used in any ``repl`` blocks.
 
 .. code-block:: rst
 
@@ -78,6 +80,7 @@ will produce:
 A REPL block may contain (potentially nested) condition/loop statements:
 
 .. code-block:: rst
+
    .. repl::
 
       for i in range(5):
@@ -95,10 +98,10 @@ outputs
    4
    5
 
-Note that the indented code block does not need the trailing empty line to 
-terminate the indented block.
+Note that a trailing empty line to terminate the indented block will be inserted
+automatically.
 
-Finally, to hide nuisance operation (e.g., importing common libraries), 
+Finally, to hide nuisance operations (e.g., importing common libraries), 
 use ``repl-quiet`` block:
 
 .. code-block:: rst
