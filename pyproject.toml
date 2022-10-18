@@ -5,13 +5,13 @@ readme = "README.rst"
 requires-python = ">=3.7"
 # keywords = ["one", "two"]
 authors = [{name = "Takeshi Ikuma", email="tikuma@lsuhsc.edu"}]
-license = { text = "BSD 3-Clause License" }
+license = { text = "GPL-2.0 License" }
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
     "Framework :: Sphinx :: Extension",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: BSD License",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
