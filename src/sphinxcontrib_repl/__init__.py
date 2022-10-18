@@ -73,20 +73,6 @@ class REPLopen(sp.Popen):
         # return out_lines
         return out_lines
 
-
-def _option_boolean(arg):
-    """Copied from matplotlib plot_directive."""
-    if not arg or not arg.strip():
-        # no argument given, assume used as a flag
-        return True
-    elif arg.strip().lower() in ("no", "0", "false"):
-        return False
-    elif arg.strip().lower() in ("yes", "1", "true"):
-        return True
-    else:
-        raise ValueError('"%s" unknown boolean' % arg)
-
-
 # per-document repl processes
 repl_procs = {}
 
