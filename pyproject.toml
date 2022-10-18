@@ -3,7 +3,7 @@ name = "sphinxcontrib-repl"
 description = "Sphinx Extension - Directives to auto-evaluate Python code-blocks"
 readme = "README.rst"
 requires-python = ">=3.7"
-# keywords = ["one", "two"]
+keywords = ["sphinx", "autoeval", "doctest-block"]
 authors = [{name = "Takeshi Ikuma", email="tikuma@lsuhsc.edu"}]
 license = { text = "GPL-2.0 License" }
 classifiers = [
