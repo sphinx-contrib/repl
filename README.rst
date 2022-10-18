@@ -3,7 +3,7 @@ sphinxcontrib-repl - Sphinx directives to auto-evaluate Python code-blocks
 ==========================================================================
 
 The ``sphinxcontrib-repl`` directives automatically run their content line-by-line in 
-Python REPL interpreter during during Sphinx builds the host reStructuredText files. 
+Python REPL interpreter during Sphinx builds the host reStructuredText files. 
 The code-blocks are then replaced by ``doctest`` blocks containing the input/output 
 lines as appear in the interpreter.
 
@@ -12,7 +12,7 @@ Contents
 --------
 
 - `Installation <Installation_>`_
-- `Basic usage <Basic Usage_>`_
+- `Basic Usage <Basic Usage_>`_
 
 ------------
 Installation
@@ -39,7 +39,7 @@ Then, inside your Sphinx ``conf.py``, add ``sphinxcontrib_repl`` to your list of
 Basic Usage
 -----------
 
-To run Python expressions in the interpreter, list the lines in ``repl`` block:
+To run Python code in the interpreter, list the code in a ``repl`` block:
 
 .. code-block:: rst
 
@@ -49,7 +49,9 @@ To run Python expressions in the interpreter, list the lines in ``repl`` block:
       x=5
       f"{x=}"
 
-This block will produce the following document block:
+First of such block will invoke a dedicated Python interpreter process, which will continue
+to run in the background for each rST document until the document is fully parsed. With the 
+interpreter, the above block of code will produce the following document block:
 
 .. code-block:: python
 
@@ -59,10 +61,9 @@ This block will produce the following document block:
    >>> f"{x=}"
    'x=5'
 
-After the first ``repl`` block, a dedicated Python interpreter process will run 
-in the background continuously for each rST document until the document is fully
-parsed. Hence, the variables will carry between blocks. For example, after 
-the above example, the variable ``x`` may be used in any ``repl`` blocks.
+As the interpreter process will run continuously, the variables will carry between blocks. 
+For example, after the above ``repl`` block, the variable ``x`` may be used in any 
+subsequent ``repl`` blocks (unless you delete it):
 
 .. code-block:: rst
 
