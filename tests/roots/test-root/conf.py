@@ -1,1 +1,1 @@
-extensions = ['sphinx_ext_repl']
+extensions = ['sphinxcontrib_repl']

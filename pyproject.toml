@@ -34,4 +34,4 @@ build-backend = "setuptools.build_meta"
 testpaths = ["tests"]
 
 [tool.setuptools.dynamic]
-version = {attr = "sphinx_ext_repl.__version__"}
+version = {attr = "sphinxcontrib_repl.__version__"}
