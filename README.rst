@@ -1,11 +1,13 @@
 ==========================================================================
-sphinxcontrib-repl - Sphinx directives to auto-evaluate Python code-blocks
+sphinxcontrib-repl - Directives to auto-evaluate Python code-blocks
 ==========================================================================
 
-The ``sphinxcontrib-repl`` directives automatically run their content line-by-line in 
-Python REPL interpreter during Sphinx builds the host reStructuredText files. 
-The code-blocks are then replaced by ``doctest`` blocks containing the input/output 
-lines as appear in the interpreter.
+``sphinxcontrib-repl`` is an extension to `Sphinx <https://www.sphinx-doc.org/>`_ 
+document generator tool. The extension introduces ``repl`` and ``repl-quiet`` 
+directives to run Python REPL interpreters during Sphinx builds the 
+documentation. The content of the directives will be automatically evaluated 
+line-by-line in the interpreter, and ``repl`` blocks will add what would be 
+printed on the interpreter in the output document. 
 
 --------
 Contents
@@ -31,7 +33,7 @@ Then, inside your Sphinx ``conf.py``, add ``sphinxcontrib_repl`` to your list of
 .. code-block:: Python
 
    extensions = [
-       sphinxcontrib_repl,
+       "sphinxcontrib_repl",
        # other extensions...
    ]
 
@@ -111,5 +113,5 @@ use ``repl-quiet`` block:
 
       import numpy as np
 
-After this block, the Numpy package is loaded by the interpreter, but the import
+After this block, the Numpy package is loaded onto the interpreter, but the import
 line will not be printed in the document.

@@ -1,6 +1,6 @@
 [project]
 name = "sphinxcontrib-repl"
-description = "Auto-executing Python REPL directive"
+description = "Sphinx Extension - Directives to auto-evaluate Python code-blocks"
 readme = "README.rst"
 requires-python = ">=3.7"
 # keywords = ["one", "two"]
