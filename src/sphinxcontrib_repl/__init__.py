@@ -93,9 +93,8 @@ class REPL(Directive):
     option_spec = {}
 
     def run(self):
-        # run the content on REPL
-        liens = get_repl(self).communicate(self.content)
-        s = "\n".join(liens)
+        # run the content on REPL and get stdin+stdout+stderr block of lines
+        s = "\n".join(get_repl(self).communicate(self.content))
         return [nodes.doctest_block(s, s, language="python")]
 
 
