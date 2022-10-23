@@ -1,3 +1,5 @@
+import os
+import sys
 import subprocess as sp
 
 from docutils import nodes
@@ -9,12 +11,13 @@ __version__ = "0.1.0"
 class REPLopen(sp.Popen):
     def __init__(self) -> None:
         super().__init__(
-            ["python", "-i", "-q"],
+            [sys.executable, "-i", "-q"],
             stdin=sp.PIPE,
             stdout=sp.PIPE,
             stderr=sp.STDOUT,
             universal_newlines=True,
             bufsize=0,
+            cwd=os.getcwd(),
         )
         self.stdout.read(4)
 
