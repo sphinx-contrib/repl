@@ -15,6 +15,7 @@ Contents
 
 - `Installation <Installation_>`_
 - `Basic Usage <Basic Usage_>`_
+- `Matplotlib Integration <Matplotlib Integration_>`_
 
 ------------
 Installation
@@ -104,7 +105,7 @@ outputs
 Note that a trailing empty line to terminate the indented block will be inserted
 automatically.
 
-Finally, to hide nuisance operations (e.g., importing common libraries), 
+To hide nuisance operations (e.g., importing common libraries), 
 use ``repl-quiet`` block:
 
 .. code-block:: rst
@@ -115,3 +116,62 @@ use ``repl-quiet`` block:
 
 After this block, the Numpy package is loaded onto the interpreter, but the import
 line will not be printed in the document.
+
+--------------------------
+Matplotlib Integration
+--------------------------
+
+Plotting ``matplotlib`` figures in the REPL interpreter process yields the figures
+to be automatically exported to the document:
+
+.. code-block:: rst
+   
+   .. repl::
+      
+      import numpy as np
+      from matplotlib import pyplot as plt
+
+      plt.plot(np.random.randn(100))
+      plt.figure()
+      plt.plot(np.random.randn(100))
+      plt.show()
+
+The above RST ``repl`` block generates the following Python code snippet and the 
+figure images:
+
+.. code-block:: python
+
+   import numpy as np
+
+   from matplotlib import pyplot as plt
+
+
+   plt.plot(np.random.randn(100))
+   [<matplotlib.lines.Line2D object at 0x0000025C046CCDF0>]
+
+   plt.figure()
+   <Figure size 800x400 with 0 Axes>
+
+   plt.plot(np.random.randn(100))
+   [<matplotlib.lines.Line2D object at 0x0000025C0471A7F0>]
+
+   plt.show()
+
+.. image:: docs/imgs/mpl_0_1.svg
+
+.. image:: docs/imgs/mpl_0_2.svg
+
+To hide the Python code, use the ``repl-quiet`` directive, which will only display 
+the figures:
+
+.. code-block:: rst
+
+   .. repl-quiet::
+      
+      plt.plot(np.random.randn(100))
+      plt.title('plotted in repl-quiet')
+      plt.show()
+
+This code prints only the image:
+
+.. image:: docs/imgs/mpl_1_1.svg
