@@ -318,9 +318,14 @@ class REPL_Quiet(Directive):
 
         # only return the image lines
         return [
-            create_image(self.state_machine.document, line)
-            for line in lines
-            if line.startswith("#repl:img:")
+            nodes.container(
+                "",
+                *(
+                    create_image(self.state_machine.document, line)
+                    for line in lines
+                    if line.startswith("#repl:img:")
+                ),
+            )
         ]
 
 
