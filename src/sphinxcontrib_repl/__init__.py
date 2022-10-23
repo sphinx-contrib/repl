@@ -55,6 +55,7 @@ add `disable_mpl` env flag to skip mpl initialization
 
 """
 
+import json
 import os
 import sys
 import subprocess as sp
@@ -63,6 +64,27 @@ from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 
 __version__ = "0.1.0"
+
+
+def _option_boolean(arg):
+    if not arg or not arg.strip():
+        # no argument given, assume used as a flag
+        return True
+    elif arg.strip().lower() in ("no", "0", "false"):
+        return False
+    elif arg.strip().lower() in ("yes", "1", "true"):
+        return True
+    else:
+        raise ValueError(f"{arg!r} unknown boolean")
+
+
+def _validate_json_dict(arg):
+    try:
+        d = json.loads(arg)
+        assert isinstance(d, dict)
+        return d
+    except:
+        raise TypeError("expect JSON encoded dict")
 
 
 class REPLopen(sp.Popen):
@@ -166,7 +188,7 @@ class REPLopen(sp.Popen):
                     if show_in is not None:
                         show_input = show_in
                     if show_out is not None:
-                        show_output = show_out 
+                        show_output = show_out
                     continue
 
                 # how to handle current line
@@ -313,30 +335,65 @@ class div(nodes.General, nodes.Element):
 #
 # mpl option
 # from matplotlib import rcsetup
-# option_spec = {'figsize':     rcsetup.validate_floatlist,  # figure size in inches
-# 'dpi':       rcsetup.validate_dpi,      # figure dots per inch or 'figure'
-# 'facecolor': rcsetup.validate_color,        # figure face color when saving
-# 'edgecolor': rcsetup.validate_color,        # figure edge color when saving
-# 'format':    'auto',         # {png, ps, pdf, svg}
-# 'bbox':      rcsetup.validate_bbox,    # {tight, standard}
-#                                 # 'tight' is incompatible with pipe-based animation
-#                                 # backends (e.g. 'ffmpeg') but will work with those
-#                                 # based on temporary files (e.g. 'ffmpeg_file')
-# 'pad_inches':  rcsetup.validate_float,       # padding to be used, when bbox is set to 'tight'
-# 'rc_params': {}      # other rcParams options
-# }
 
 
-def _option_boolean(arg):
-    if not arg or not arg.strip():
-        # no argument given, assume used as a flag
-        return True
-    elif arg.strip().lower() in ("no", "0", "false"):
-        return False
-    elif arg.strip().lower() in ("yes", "1", "true"):
-        return True
-    else:
-        raise ValueError(f"{arg!r} unknown boolean")
+def create_mpl_option_spec():
+    try:
+        from matplotlib import rcsetup
+
+        _error = None
+    except:
+
+        def _raise(arg):
+            raise RuntimeError("matplotlib package not found")
+
+        _error = _raise
+
+    return {
+        "figsize": _error or rcsetup._listify_validator(rcsetup.validate_float, n=2),
+        "dpi": _error or rcsetup.validate_dpi,
+        "facecolor": _error or rcsetup.validate_color,
+        "edgecolor": _error or rcsetup.validate_color,
+        "bbox": _error or rcsetup.validate_bbox,
+        "pad_inches": _error or rcsetup.validate_float,
+        "transparent": _error or rcsetup.validate_bool,
+        "rc_params": _error or _validate_json_dict,
+    }
+
+
+def modify_mpl_rcparams(proc, options):
+
+    lines = ["import matplotlib as _mpl"]
+
+    # write rc_params options
+    for k, v in options.get("rc_params", {}).items():
+        if isinstance(v, str):
+            v = f"'{v}'"
+        lines.append(f"_mpl.rcParams['{k}']={v}")
+
+    # figure size option needs to be converted from tuple to
+    v = options.get("figsize", None)
+    if v is not None:
+        lines.append(f"_mpl.rcParams['figure.figsize']={v}")
+
+    # write
+    for key in [
+        "savefig.dpi",
+        "savefig.facecolor",
+        "savefig.edgecolor",
+        "savefig.bbox",
+        "savefig.pad_inches",
+        "savefig.transparent",
+    ]:
+        value = options.get(key.split(".", 1)[-1], None)
+        if value is not None:
+            if isinstance(value, str):
+                value = f"'{value}'"
+            lines.append(f"_mpl.rcParams['{key}']={value}")
+
+    if len(lines) > 1:
+        _ = proc.communicate(lines, True, True)
+        _
 
 
 class REPL(Directive):
@@ -344,11 +401,21 @@ class REPL(Directive):
     has_content = True
     required_arguments = 0
     optional_arguments = 0
-    option_spec = {"hide-input": _option_boolean, "hide-output": _option_boolean}
+    option_spec = {
+        "hide-input": _option_boolean,
+        "hide-output": _option_boolean,
+        **create_mpl_option_spec(),
+    }
 
     def run(self):
+
+        proc = get_repl(self)
+
+        # apply if any mpl.rcParams options are given
+        modify_mpl_rcparams(proc, self.options)
+
         # run the content on REPL and get stdin+stdout+stderr block of lines
-        lines = get_repl(self).communicate(
+        lines = proc.communicate(
             self.content,
             show_input=not self.options.get("hide-input", False),
             show_output=not self.options.get("hide-output", False),
@@ -391,16 +458,19 @@ class REPL_Quiet(Directive):
     has_content = True
     required_arguments = 0
     optional_arguments = 0
-    option_spec = {}
+    option_spec = create_mpl_option_spec()
 
     def run(self):
         # dump the content on REPL & ignore what's printed on the interpreter
         # do show the matplotlib figures
 
+        proc = get_repl(self)
+
+        # apply if any mpl.rcParams options are given
+        modify_mpl_rcparams(proc, self.options)
+
         # run the content on REPL and get stdin+stdout+stderr block of lines
-        lines = get_repl(self).communicate(
-            self.content, show_input=False, show_output=False
-        )
+        lines = proc.communicate(self.content, show_input=False, show_output=False)
 
         # only return the image lines
         return [

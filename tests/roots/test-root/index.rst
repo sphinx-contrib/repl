@@ -46,7 +46,8 @@ Note that the indented code block does not need trailing empty line.
 
 With ``repl-quiet`` directive, only the plotted figures are shown:
 
-.. repl-quiet::
+.. repl::
+   :figsize: 6, 4
    
    plt.plot(np.random.randn(100))
    plt.title('plotted in repl-quiet')
