@@ -16,6 +16,7 @@ Contents
 - `Installation <Installation_>`_
 - `Basic Usage <Basic Usage_>`_
 - `Matplotlib Integration <Matplotlib Integration_>`_
+- `Options <Options_>`_
 
 ------------
 Installation
@@ -210,19 +211,19 @@ the extension options (in the Sphinx `conf.py` file) or as the directive options
 directive options persist in the subsequent directives.
 
 In addition to the figure options, any Matplotlib rc settings could be changed via `rc_params` option.
-Consult `the default matplotlibrc file <https://matplotlib.org/stable/tutorials/introductory/customizing.html#the-matplotlibrc-file_>`_.
+Consult `the default matplotlibrc file <https://matplotlib.org/stable/tutorials/introductory/customizing.html#the-matplotlibrc-file>`_.
 
-========================  =================  ============  ===========
-Extension Option          Directive Option   Default       description
-========================  =================  ============  ===========
-``repl_mpl_disable``                         ``False``     ``True`` to disable matplotlib support
-``repl_mpl_dpi``                             ``96``        raster dots per inch 
-``repl_mpl_format``                          ``svg``       output image format (default is pdf for latex) {png, ps, pdf, svg}
-``repl_mpl_figsize``      ``:figsize:``      ``6.4, 4.8``  figure size in inches
-``repl_mpl_facecolor``    ``:facecolor:``    ``white``     figure face color
-``repl_mpl_edgecolor``    ``:edgecolor:``    ``white``     figure edge color 
-``repl_mpl_bbox``         ``:bbox:``         ``standard``  bounding box {tight, standard}
-``repl_mpl_pad_inches``   ``:pad_inches:``   ``0.1``       padding to be used, when bbox is set to 'tight'
-``repl_mpl_transparent``  ``:transparent:``  ``False``     whether figures are saved with a transparent
-``repl_mpl_rc_params``    ``:rc_params:``                  other rcParams options
-========================  =================  ============  ===========
+==========================  =================  ============  ===========
+Extension option            Directive option   Default       Description
+==========================  =================  ============  ===========
+``:repl_mpl_disable:``                         ``False``     ``True`` to disable matplotlib support
+``:repl_mpl_dpi:``                             ``96``        raster dots per inch 
+``:repl_mpl_format:``                          ``svg``       output image format (default is pdf for latex) {png, ps, pdf, svg}
+``:repl_mpl_figsize:``      ``:figsize:``      ``6.4, 4.8``  figure size in inches
+``:repl_mpl_facecolor:``    ``:facecolor:``    ``white``     figure face color
+``:repl_mpl_edgecolor:``    ``:edgecolor:``    ``white``     figure edge color 
+``:repl_mpl_bbox:``         ``:bbox:``         ``standard``  bounding box {tight, standard}
+``:repl_mpl_pad_inches:``   ``:pad_inches:``   ``0.1``       padding to be used, when bbox is set to 'tight'
+``:repl_mpl_transparent:``  ``:transparent:``  ``False``     whether figures are saved with a transparent
+``:repl_mpl_rc_params:``    ``:rc_params:``                  other rcParams options
+==========================  =================  ============  ===========
