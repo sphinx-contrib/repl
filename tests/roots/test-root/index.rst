@@ -1,6 +1,6 @@
 Run REPL during rst compiling
 
-.. repl-quiet ::
+.. repl-quiet::
 
     import json
     'do not print this'
@@ -9,7 +9,7 @@ Run REPL during rst compiling
 Create a repl block with auto-executing Python prompts, and it prints the commands as
 `doctest`
 
-.. repl ::
+.. repl::
 
    2*3+4
    x=5
@@ -17,7 +17,7 @@ Create a repl block with auto-executing Python prompts, and it prints the comman
 
 The same REPL shell is used throughout each RST document:
 
-.. repl ::
+.. repl::
 
    x
    y
@@ -25,7 +25,7 @@ The same REPL shell is used throughout each RST document:
 
 A REPL block may contain (potentially nested) condition/loop statements:
 
-.. repl ::
+.. repl::
 
     for i in range(5):
         if i>2:
@@ -33,7 +33,7 @@ A REPL block may contain (potentially nested) condition/loop statements:
 
 Note that the indented code block does not need trailing empty line.
 
-.. repl ::
+.. repl::
    
    import numpy as np
    from matplotlib import pyplot as plt
@@ -45,7 +45,7 @@ Note that the indented code block does not need trailing empty line.
 
 With ``repl-quiet`` directive, only the plotted figures are shown:
 
-.. repl-quiet ::
+.. repl-quiet::
    
    plt.plot(np.random.randn(100))
    plt.title('plotted in repl-quiet')
