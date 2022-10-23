@@ -79,10 +79,34 @@ class REPLopen(sp.Popen):
         self.stdout.read(4)
 
     def communicate(self, lines, show_input=True, show_output=True):
+        """input command lines one at a time & record interpreter I/O
+
+        :param lines: Python command lines (no new line at the end)
+        :type lines: list[str]
+        :param show_input: True to show input lines by default, defaults to True
+        :type show_input: bool, optional
+        :param show_output: True to show output lines by default, defaults to True
+        :type show_output: bool, optional
+        :return: list of stored interpreter lines
+        :rtype: list[str]
+
+        magic comments
+
+        - #repl:hide
+        - #repl:show
+        - #repl:hide-input
+        - #repl:hide-output
+
+        special comment outputs
+
+        - #repl:img:  - path of the output image
+
+        """
+
         out_lines = []  # doctest_block lines to output
         out = ">>> "  # last read output
 
-        def try_read_prompt():
+        def try_read_prompt(show_out):
             """read until 4-character Python prompt string is obtained"""
 
             # receive 4 bytes (if no output, it is either '>>> ' or '... ')
@@ -91,48 +115,87 @@ class REPLopen(sp.Popen):
             # if output line is shorter than 4 bytes, split
             eol = out.rfind("\n") + 1
             while eol:
-                if show_output:
+                if show_out:
                     out_lines.append(out[: eol - 1])
                 out = out[eol:] + self.stdout.read(eol)
                 eol = out.rfind("\n") + 1
 
             return out
 
-        def read_next():
+        def process_magic(magic):
+
+            try:
+                cmd, io = magic.split("-")
+                is_in = io.startswith("in")
+                is_out = io.startswith("out")
+            except:
+                cmd = magic
+                is_in = is_out = True
+
+            show = cmd == "show"  # show/hide
+            if (not show and cmd != "hide") or not (is_in or is_out):
+                raise self.error(f"{magic} - unknown magic comment")
+
+            return show if is_in else None, show if is_out else None
+
+        def read_next(show_out):
             """read output lines (If any) until encounters the next prompt"""
 
-            out = try_read_prompt()
+            out = try_read_prompt(show_out)
 
             # enter the loop only if line produced an output
             while out not in (">>> ", "... "):
                 # output line found
                 out += self.stdout.readline()  # get the rest of the line
-                if show_output or out.startswith("#repl:"):
+                if show_out or out.startswith("#repl:"):
                     out_lines.append(out[:-1])
 
                 # read the next 4-characters
-                out = try_read_prompt()
+                out = try_read_prompt(show_out)
 
             return out
 
         for line in lines:
+
+            # check for magic word
+            try:
+                line, magic = line.rsplit("#repl:", 1)
+                show_in, show_out = process_magic(magic)
+                if not line or line.isspace():
+                    # comment line, set new display modes and done
+                    if show_in is not None:
+                        show_input = show_in
+                    if show_out is not None:
+                        show_output = show_out 
+                    continue
+
+                # how to handle current line
+                if show_in is None:
+                    show_in = show_input
+                if show_out is None:
+                    show_out = show_output
+
+            except:
+                show_in = show_input
+                show_out = show_output
+
             # submit a new line to REPL
             self.stdin.write(f"{line}\n")
-            if show_input:
+            if show_in:
                 out_lines.append(f"{out}{line}")
 
             # get any output it produced
-            out = read_next()
+            out = read_next(show_out)
 
         # insert empty lines if Python prompt is not shown
         while out != ">>> ":
             # submit a new line to REPL
             self.stdin.write(f"\n")
-            if show_input:
+            if show_in:
                 out_lines.append(out)
 
             # get any output it produced
-            out = read_next()
+            out = read_next(show_output)
 
         # return out_lines
         return out_lines

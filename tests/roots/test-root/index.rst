@@ -51,3 +51,17 @@ With ``repl-quiet`` directive, only the plotted figures are shown:
    plt.plot(np.random.randn(100))
    plt.title('plotted in repl-quiet')
    plt.show()
+
+.. repl::
+
+   #repl:hide-input
+   'no input'
+   'show input' #repl:show
+   'no input again'
+   #repl:show-input
+
+   #repl:hide-output
+   'no output'
+   'show output' #repl:show
+   'no output again'
+   #repl:show-output
