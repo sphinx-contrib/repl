@@ -78,7 +78,7 @@ class REPLopen(sp.Popen):
         )
         self.stdout.read(4)
 
-    def communicate(self, lines):
+    def communicate(self, lines, show_input=True, show_output=True):
         out_lines = []  # doctest_block lines to output
         out = ">>> "  # last read output
 
@@ -91,7 +91,8 @@ class REPLopen(sp.Popen):
             # if output line is shorter than 4 bytes, split
             eol = out.rfind("\n") + 1
             while eol:
-                out_lines.append(out[: eol - 1])
+                if show_output:
+                    out_lines.append(out[: eol - 1])
                 out = out[eol:] + self.stdout.read(eol)
                 eol = out.rfind("\n") + 1
 
@@ -106,7 +107,8 @@ class REPLopen(sp.Popen):
             while out not in (">>> ", "... "):
                 # output line found
                 out += self.stdout.readline()  # get the rest of the line
-                out_lines.append(out[:-1])
+                if show_output or out.startswith("#repl:"):
+                    out_lines.append(out[:-1])
 
                 # read the next 4-characters
                 out = try_read_prompt()
@@ -116,7 +118,8 @@ class REPLopen(sp.Popen):
         for line in lines:
             # submit a new line to REPL
             self.stdin.write(f"{line}\n")
-            out_lines.append(f"{out}{line}")
+            if show_input:
+                out_lines.append(f"{out}{line}")
 
             # get any output it produced
             out = read_next()
@@ -125,7 +128,8 @@ class REPLopen(sp.Popen):
         while out != ">>> ":
             # submit a new line to REPL
             self.stdin.write(f"\n")
-            out_lines.append(out)
+            if show_input:
+                out_lines.append(out)
 
             # get any output it produced
             out = read_next()
@@ -195,7 +199,7 @@ def init_mpl(proc, app, format):
         f'_mpl.rcParams["savefig.directory"] = r"{img_prefix}"',
         f'_mpl.rcParams["savefig.format"] = "{format}"',
     ]
-    proc.communicate(cmds)
+    proc.communicate(cmds, show_input=False, show_output=False)
 
 
 def kill_repl(app, doctree):
@@ -260,15 +264,32 @@ class div(nodes.General, nodes.Element):
 # }
 
 
+def _option_boolean(arg):
+    if not arg or not arg.strip():
+        # no argument given, assume used as a flag
+        return True
+    elif arg.strip().lower() in ("no", "0", "false"):
+        return False
+    elif arg.strip().lower() in ("yes", "1", "true"):
+        return True
+    else:
+        raise ValueError(f"{arg!r} unknown boolean")
+
+
 class REPL(Directive):
+
     has_content = True
     required_arguments = 0
     optional_arguments = 0
-    option_spec = {}
+    option_spec = {"hide-input": _option_boolean, "hide-output": _option_boolean}
 
     def run(self):
         # run the content on REPL and get stdin+stdout+stderr block of lines
-        lines = get_repl(self).communicate(self.content)
+        lines = get_repl(self).communicate(
+            self.content,
+            show_input=not self.options.get("hide-input", False),
+            show_output=not self.options.get("hide-output", False),
+        )
 
         # no lines to show
         if not len(lines):
@@ -314,7 +335,9 @@ class REPL_Quiet(Directive):
         # do show the matplotlib figures
 
         # run the content on REPL and get stdin+stdout+stderr block of lines
-        lines = get_repl(self).communicate(self.content)
+        lines = get_repl(self).communicate(
+            self.content, show_input=False, show_output=False
+        )
 
         # only return the image lines
         return [

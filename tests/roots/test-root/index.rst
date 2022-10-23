@@ -34,6 +34,7 @@ A REPL block may contain (potentially nested) condition/loop statements:
 Note that the indented code block does not need trailing empty line.
 
 .. repl::
+   :hide-output: true
    
    import numpy as np
    from matplotlib import pyplot as plt
