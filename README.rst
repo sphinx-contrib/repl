@@ -53,7 +53,7 @@ To run Python code in the interpreter, list the code in a ``repl`` block:
       f"{x=}"
 
 First of such block will invoke a dedicated Python interpreter process, which will continue
-to run in the background for each rST document until the document is fully parsed. With the 
+to run in the background for each RST document until the document is fully parsed. With the 
 interpreter, the above block of code will produce the following document block:
 
 .. code-block:: python
@@ -175,3 +175,48 @@ the figures:
 This code prints only the image:
 
 .. image:: docs/imgs/mpl_1_1.svg
+
+--------------------------
+Options
+--------------------------
+
+Visibility Control Options
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In ``repl`` directive content, input and output lines maybe hidden with boolean directive options:
+``:hide-input: true`` and ``:hide-output: true`` hide input lines and output lines, respectively.
+
+Also, their visibility could be toggled in the directive's Python command lines. Inserting the magic
+comments listed below as a comment line will switch the visibility of input or output lines (or both).
+In addition, using these magic comments inline with a Python command will set the visibility only for
+the line.
+
+=================  =====================  ===========
+Directive          Magic comment          Description
+=================  =====================  ===========
+``:hide-input:``   ``#repl:hide-input``   Hide input
+``:hide-output:``  ``#repl:hide-output``  Hide output
+\                  ``#repl:show-input``   Show input
+\                  ``#repl:show-output``  Show output 
+\                  ``#repl:hide``         Hide both input and output
+\                  ``#repl:show``         Show both input and output
+=================  =====================  ===========
+
+.. TODO
+.. Matplotlib Options
+.. ^^^^^^^^^^^^^^^^^^
+
+.. ------------------------  ---------------  -----------
+.. extension                 directive        description
+.. ------------------------  ---------------  -----------
+.. ``repl_mpl_disable``                       ``True`` to disable matplotlib support
+.. ``repl_mpl_dpi``                                       
+.. ``repl_mpl_format``
+.. ``repl_mpl_figsize``      ``figsize``
+.. ``repl_mpl_facecolor``    ``facecolor``
+.. ``repl_mpl_edgecolor``    ``edgecolor``
+.. ``repl_mpl_bbox``         ``bbox``
+.. ``repl_mpl_pad_inches``   ``pad_inches``
+.. ``repl_mpl_transparent``  ``transparent``
+.. ``repl_mpl_rc_params``    ``rc-params``
+.. ------------------------  ---------------  ----  ----  -----------
