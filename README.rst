@@ -7,7 +7,7 @@ document generator tool. The extension introduces ``repl`` and ``repl-quiet``
 directives to run Python REPL interpreters during Sphinx builds the 
 documentation. The content of the directives will be automatically evaluated 
 line-by-line in the interpreter, and ``repl`` blocks will add what would be 
-printed on the interpreter in the output document. 
+printed on the interpreter to the output document. 
 
 --------
 Contents
@@ -54,8 +54,8 @@ To run Python code in the interpreter, list the code in a ``repl`` block:
       f"{x=}"
 
 First of such block will invoke a dedicated Python interpreter process, which will continue
-to run in the background for each RST document until the document is fully parsed. With the 
-interpreter, the above block of code will produce the following document block:
+to run in the background for each RST document until the document is fully parsed. The above block
+of code will produce the following document block:
 
 .. code-block:: python
 
@@ -184,24 +184,71 @@ Options
 Visibility Control Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In ``repl`` directive content, input and output lines maybe hidden with boolean directive options:
-``:hide-input: true`` and ``:hide-output: true`` hide input lines and output lines, respectively.
-
-Also, their visibility could be toggled in the directive's Python command lines. Inserting the magic
-comments listed below as a comment line will switch the visibility of input or output lines (or both).
-In addition, using these magic comments inline with a Python command will set the visibility only for
-the line.
+By default, ``repl`` directive shows everything and ``repl-quiet`` hides everything. It is possible
+to control the visibility of inpue and output lines in the ``repl`` directive with the following
+directive options and magic comments.
 
 =================  =====================  ===========
 Directive          Magic comment          Description
 =================  =====================  ===========
-``:hide-input:``   ``#repl:hide-input``   Hide input
-``:hide-output:``  ``#repl:hide-output``  Hide output
+``:hide-input:``   ``#repl:hide-input``   Hide input (directive option value: ``true`` or ``false``)
+``:hide-output:``  ``#repl:hide-output``  Hide output (directive option value: ``true`` or ``false``)
 \                  ``#repl:show-input``   Show input
 \                  ``#repl:show-output``  Show output 
 \                  ``#repl:hide``         Hide both input and output
 \                  ``#repl:show``         Show both input and output
 =================  =====================  ===========
+
+For example,
+
+.. code-block:: rst
+
+   .. repl::
+      :hide-output: true
+
+      'only shown as input'
+
+outputs
+
+.. code-block:: rst
+
+   >>> 'only shown as input'
+
+and does not show the echoed output string.
+
+To provide a fine-grain control, there are 6 magic comments to switch the visibility. They can be applied
+only to a line (as an inline comment) or toggle for the remainder of the directive context.
+
+.. code-block:: rst
+
+   .. repl::
+
+      #repl:hide-input
+      'no input'
+      'show input' #repl:show
+      'no input again'
+      #repl:show-input
+
+      #repl:hide-output
+      'no output'
+      'show output' #repl:show
+      'no output again'
+      #repl:show-output
+
+
+outputs
+
+.. code-block:: rst
+
+   'no input'
+   >>> 'show input' 
+   'show input'
+   'no input again'
+   >>> 
+   >>> 'no output'
+   >>> 'show output' 
+   'show output'
+   >>> 'no output again'
 
 Matplotlib Options
 ^^^^^^^^^^^^^^^^^^
@@ -211,19 +258,21 @@ the extension options (in the Sphinx `conf.py` file) or as the directive options
 directive options persist in the subsequent directives.
 
 In addition to the figure options, any Matplotlib rc settings could be changed via `rc_params` option.
-Consult `the default matplotlibrc file <https://matplotlib.org/stable/tutorials/introductory/customizing.html#the-matplotlibrc-file>`_.
+Consult `the default matplotlibrc file <https://matplotlib.org/stable/tutorials/introductory/customizing.html#the-matplotlibrc-file>`_
+for possible entries. The exposed options are of the ``savefig`` group, except for ``figsize`` which
+sets ``figure.figsize`` option in the REPL interpreter.
 
-==========================  =================  ============  ===========
-Extension option            Directive option   Default       Description
-==========================  =================  ============  ===========
-``:repl_mpl_disable:``                         ``False``     ``True`` to disable matplotlib support
-``:repl_mpl_dpi:``                             ``96``        raster dots per inch 
-``:repl_mpl_format:``                          ``svg``       output image format (default is pdf for latex) {png, ps, pdf, svg}
-``:repl_mpl_figsize:``      ``:figsize:``      ``6.4, 4.8``  figure size in inches
-``:repl_mpl_facecolor:``    ``:facecolor:``    ``white``     figure face color
-``:repl_mpl_edgecolor:``    ``:edgecolor:``    ``white``     figure edge color 
-``:repl_mpl_bbox:``         ``:bbox:``         ``standard``  bounding box {tight, standard}
-``:repl_mpl_pad_inches:``   ``:pad_inches:``   ``0.1``       padding to be used, when bbox is set to 'tight'
-``:repl_mpl_transparent:``  ``:transparent:``  ``False``     whether figures are saved with a transparent
-``:repl_mpl_rc_params:``    ``:rc_params:``                  other rcParams options
-==========================  =================  ============  ===========
+========================  =================  ============  ===========
+Extension                 Directive          Default       Description
+========================  =================  ============  ===========
+``repl_mpl_disable``                         ``False``     ``True`` to disable matplotlib support
+``repl_mpl_dpi``                             ``96``        raster dots per inch 
+``repl_mpl_format``                          ``svg``       output image format (default is pdf for latex) {png, ps, pdf, svg}
+``repl_mpl_figsize``      ``:figsize:``      ``6.4, 4.8``  figure size in inches
+``repl_mpl_facecolor``    ``:facecolor:``    ``white``     figure face color
+``repl_mpl_edgecolor``    ``:edgecolor:``    ``white``     figure edge color 
+``repl_mpl_bbox``         ``:bbox:``         ``standard``  bounding box {tight, standard}
+``repl_mpl_pad_inches``   ``:pad_inches:``   ``0.1``       padding to be used, when bbox is set to 'tight'
+``repl_mpl_transparent``  ``:transparent:``  ``False``     whether figures are saved with a transparent
+``repl_mpl_rc_params``    ``:rc_params:``                  other rcParams options
+========================  =================  ============  ===========
