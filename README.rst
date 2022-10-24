@@ -142,21 +142,15 @@ figure images:
 
 .. code-block:: python
 
-   import numpy as np
-
-   from matplotlib import pyplot as plt
-
-
-   plt.plot(np.random.randn(100))
+   >>> import numpy as np
+   >>> from matplotlib import pyplot as plt
+   >>> plt.plot(np.random.randn(100))
    [<matplotlib.lines.Line2D object at 0x0000025C046CCDF0>]
-
-   plt.figure()
+   >>> plt.figure()
    <Figure size 800x400 with 0 Axes>
-
-   plt.plot(np.random.randn(100))
+   >>> plt.plot(np.random.randn(100))
    [<matplotlib.lines.Line2D object at 0x0000025C0471A7F0>]
-
-   plt.show()
+   >>> plt.show()
 
 .. image:: docs/imgs/mpl_0_1.svg
 
