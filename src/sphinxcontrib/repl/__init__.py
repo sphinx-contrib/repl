@@ -272,21 +272,6 @@ def create_mpl_container_node(document, lines, options):
     )
 
 
-# TODO : add following options to Directives
-# image option
-# option_spec = {'alt': directives.unchanged,
-#                 'height': directives.length_or_unitless,
-#                 'width': directives.length_or_percentage_or_unitless,
-#                 'scale': directives.percentage,
-#                 'align': align,
-#                 'target': directives.unchanged_required,
-#                 'class': directives.class_option,
-#                 'name': directives.unchanged}
-#
-# mpl option
-# from matplotlib import rcsetup
-
-
 def create_image_option_spec():
     return {
         "image_alt": directives.unchanged,
