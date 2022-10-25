@@ -22,9 +22,14 @@ classifiers = [
 dependencies = ["docutils"]
 dynamic = ["version"]
 
+[project.urls]
+Repository = "https://github.com/sphinx-contrib/repl"
+Discussions = "https://github.com/sphinx-contrib/repl/discussions"
+Issues = "https://github.com/sphinx-contrib/repl/issues"
+PullRequests = "https://github.com/sphinx-contrib/repl/pulls"
+
 [project.optional-dependencies]
 mpl = ["matplotlib"]
-
 
 [build-system]
 requires = ["setuptools >= 40.9.0", "wheel"]
