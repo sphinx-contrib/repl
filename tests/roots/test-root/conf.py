@@ -1,4 +1,4 @@
-extensions = ["sphinxcontrib_repl"]
+extensions = ["sphinxcontrib.repl"]
 
 
 repl_mpl_disable = False

@@ -277,7 +277,7 @@ def init_mpl(proc, app, format):
     # - if matplotlib not installed, these lines will silently fail
     cmds = [
         "import matplotlib as _mpl",
-        '_mpl.use("module://sphinxcontrib_repl.mpl_backend")',
+        '_mpl.use("module://sphinxcontrib.repl.mpl_backend")',
         f'_mpl.rcParams["savefig.directory"] = r"{img_prefix}"',
         f'_mpl.rcParams["savefig.format"] = "{format}"',
     ]

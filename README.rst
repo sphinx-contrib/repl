@@ -41,14 +41,12 @@ Install from PyPI:
    
    pip install sphinxcontrib-repl
 
-Then, inside your Sphinx ``conf.py``, add ``sphinxcontrib_repl`` to your list of extensions 
-(note: underscores not hyphens).
-
+Then, inside your Sphinx ``conf.py``, add ``sphinxcontrib.repl`` to your list of extensions:
 
 .. code-block:: Python
 
    extensions = [
-       "sphinxcontrib_repl",
+       "sphinxcontrib.repl",
        # other extensions...
    ]
 
