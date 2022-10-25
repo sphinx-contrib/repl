@@ -281,7 +281,9 @@ def init_mpl(proc, app, format):
         f'_mpl.rcParams["savefig.directory"] = r"{img_prefix}"',
         f'_mpl.rcParams["savefig.format"] = "{format}"',
     ]
-    proc.communicate(cmds, show_input=False, show_output=False)
+    _ = proc.communicate(cmds, show_input=False, show_output=True)
+    if _:
+        raise RuntimeError(f"failed to initialize matplotlib:\n\n{_}")
 
 
 def kill_repl(app, doctree):
@@ -389,8 +391,9 @@ def modify_mpl_rcparams(proc, options):
             lines.append(f"_mpl.rcParams['{key}']={value}")
 
     if len(lines) > 1:
-        _ = proc.communicate(lines, True, True)
-        _
+        _ = proc.communicate(lines, False, True)
+        if _:
+            raise RuntimeError(f"failed to modify matplotlib rcParams:\n\n{_}")
 
 
 class REPL(Directive):
