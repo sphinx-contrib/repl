@@ -260,8 +260,6 @@ def create_image(document, line):
     return nodes.image(line, uri=uri)
 
 
-class div(nodes.General, nodes.Element):
-    pass
 
 
 # TODO : add following options to Directives
