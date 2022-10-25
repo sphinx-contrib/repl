@@ -226,9 +226,6 @@ class REPLopen(sp.Popen):
 # per-document repl processes
 repl_procs = {}
 
-# per-document True if mpl initialized
-mpl_init = {}
-
 
 def get_imgs_dir(app):
     # output_dir: final location in the builder's directory
