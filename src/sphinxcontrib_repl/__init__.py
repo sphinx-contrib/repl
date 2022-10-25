@@ -531,7 +531,7 @@ def setup(app):
     app.add_config_value("repl_mpl_dpi", 96, "", [int])
     app.add_config_value("repl_mpl_facecolor", None, "", [str])
     app.add_config_value("repl_mpl_edgecolor", None, "", [str])
-    app.add_config_value("repl_mpl_format", None, "", str)
+    app.add_config_value("repl_mpl_format", None, "", [str])
     app.add_config_value("repl_mpl_bbox", None, "", [tuple, list])
     app.add_config_value("repl_mpl_pad_inches", None, "", [float, int])
     app.add_config_value("repl_mpl_transparent", None, "", [float, int])
