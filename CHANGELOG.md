@@ -6,11 +6,24 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [Unreleased]
 
+## [0.2.0] - 2022-10-24
+
+### Added
+
+- Matplotlib integration
+- Added visibility control options and magic comments (see Readme)
+
+### Changed
+
+- Moved module from `sphinxcontrib_repl` to `sphinxcontrib.repl`
+- Call current executable instead of fixed `python` command
+
 ## [0.1.0] - 2022-10-18
 
 ### Added
 
 - First release
 
-[unreleased]: https://github.com/sphinx-contrib/repl/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/sphinx-contrib/repl/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/sphinx-contrib/repl/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/sphinx-contrib/repl/compare/aa188e...v0.1.0

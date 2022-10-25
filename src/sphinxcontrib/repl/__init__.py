@@ -6,7 +6,7 @@ import subprocess as sp
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 
 def _option_boolean(arg):
