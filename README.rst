@@ -267,20 +267,20 @@ Consult `the default matplotlibrc file <https://matplotlib.org/stable/tutorials/
 for possible entries. The exposed options are of the ``savefig`` group, except for ``figsize`` which
 sets ``figure.figsize`` option in the REPL interpreter.
 
-========================  =================  ============  ===========
-Extension                 Directive          Default       Description
-========================  =================  ============  ===========
-``repl_mpl_disable``                         ``False``     ``True`` to disable matplotlib support
-``repl_mpl_dpi``                             ``96``        raster dots per inch 
-``repl_mpl_format``                          ``svg``       output image format (default is pdf for latex) ``{png, ps, pdf, svg}``
-``repl_mpl_figsize``      ``:figsize:``      ``6.4, 4.8``  figure size in inches
-``repl_mpl_facecolor``    ``:facecolor:``    ``white``     figure face color
-``repl_mpl_edgecolor``    ``:edgecolor:``    ``white``     figure edge color 
-``repl_mpl_bbox``         ``:bbox:``         ``standard``  bounding box ``{tight, standard}``
-``repl_mpl_pad_inches``   ``:pad_inches:``   ``0.1``       padding to be used, when ``bbox`` is set to ``tight``
-``repl_mpl_transparent``  ``:transparent:``  ``False``     whether figures are saved with a transparent
-``repl_mpl_rc_params``    ``:rc_params:``                  other ``rcParams`` options
-========================  =================  ============  ===========
+========================  =====================  ============  ===========
+Extension                 Directive              Default       Description
+========================  =====================  ============  ===========
+``repl_mpl_disable``                             ``False``     ``True`` to disable matplotlib support
+``repl_mpl_dpi``                                 ``96``        raster dots per inch 
+``repl_mpl_format``                              ``svg``       output image format (default is pdf for latex) ``{png, ps, pdf, svg}``
+``repl_mpl_figsize``      ``:mpl_figsize:``      ``6.4, 4.8``  figure size in inches
+``repl_mpl_facecolor``    ``:mpl_facecolor:``    ``white``     figure face color
+``repl_mpl_edgecolor``    ``:mpl_edgecolor:``    ``white``     figure edge color 
+``repl_mpl_bbox``         ``:mpl_bbox:``         ``standard``  bounding box ``{tight, standard}``
+``repl_mpl_pad_inches``   ``:mpl_pad_inches:``   ``0.1``       padding to be used, when ``bbox`` is set to ``tight``
+``repl_mpl_transparent``  ``:mpl_transparent:``  ``False``     whether figures are saved with a transparent
+``repl_mpl_rc_params``    ``:mpl_rc_params:``                  other ``rcParams`` options
+========================  =====================  ============  ===========
 
 Example of extension options in ``conf.py``:
 
@@ -303,13 +303,13 @@ Example of directive options:
 .. code-block:: rst
       
    .. repl-quiet::
-      :figsize: 6, 4
-      :facecolor: orange
-      :edgecolor: red
-      :bbox: standard
-      :pad_inches:  0.1
-      :transparent:  False
-      :rc_params:  {"lines.marker": "x", "lines.markersize": 3}
+      :mpl_figsize: 6, 4
+      :mpl_facecolor: orange
+      :mpl_edgecolor: red
+      :mpl_bbox: standard
+      :mpl_pad_inches:  0.1
+      :mpl_transparent:  False
+      :mpl_rc_params:  {"lines.marker": "x", "lines.markersize": 3}
       
       plt.plot(np.random.randn(100))
       plt.title('plotted in repl-quiet')
