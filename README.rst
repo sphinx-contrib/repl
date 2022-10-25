@@ -2,6 +2,19 @@
 sphinxcontrib-repl - Directives to auto-evaluate Python code-blocks
 ==========================================================================
 
+|pypi| |pypi-status| |pypi-pyvers| |github-license| |github-status|
+
+.. |pypi| image:: https://img.shields.io/pypi/v/sphinxcontrib-repl
+  :alt: PyPI
+.. |pypi-status| image:: https://img.shields.io/pypi/status/sphinxcontrib-repl
+  :alt: PyPI - Status
+.. |pypi-pyvers| image:: https://img.shields.io/pypi/pyversions/sphinxcontrib-repl
+  :alt: PyPI - Python Version
+.. |github-license| image:: https://img.shields.io/github/license/sphinx-contrib/repl
+  :alt: GitHub License
+.. |github-status| image:: https://img.shields.io/github/workflow/status/sphinx-contrib/repl/Run%20Tests
+  :alt: GitHub Workflow Status
+
 ``sphinxcontrib-repl`` is an extension to `Sphinx <https://www.sphinx-doc.org/>`_ 
 document generator tool. The extension introduces ``repl`` and ``repl-quiet`` 
 directives to run Python REPL interpreters during Sphinx builds the 
@@ -179,7 +192,7 @@ Visibility Control Options
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 By default, ``repl`` directive shows everything and ``repl-quiet`` hides everything. It is possible
-to control the visibility of inpue and output lines in the ``repl`` directive with the following
+to control the visibility of input and output lines in the ``repl`` directive with the following
 directive options and magic comments.
 
 =================  =====================  ===========
@@ -248,10 +261,10 @@ Matplotlib Options
 ^^^^^^^^^^^^^^^^^^
 
 The Matplotlib figure properties can be customized by specifying the following options either as
-the extension options (in the Sphinx `conf.py` file) or as the directive options. Be aware that the 
+the extension options (in the Sphinx ``conf.py`` file) or as the directive options. Be aware that the 
 directive options persist in the subsequent directives.
 
-In addition to the figure options, any Matplotlib rc settings could be changed via `rc_params` option.
+In addition to the figure options, any Matplotlib rc settings could be changed via ``rc_params`` option.
 Consult `the default matplotlibrc file <https://matplotlib.org/stable/tutorials/introductory/customizing.html#the-matplotlibrc-file>`_
 for possible entries. The exposed options are of the ``savefig`` group, except for ``figsize`` which
 sets ``figure.figsize`` option in the REPL interpreter.
@@ -261,14 +274,14 @@ Extension                 Directive          Default       Description
 ========================  =================  ============  ===========
 ``repl_mpl_disable``                         ``False``     ``True`` to disable matplotlib support
 ``repl_mpl_dpi``                             ``96``        raster dots per inch 
-``repl_mpl_format``                          ``svg``       output image format (default is pdf for latex) {png, ps, pdf, svg}
+``repl_mpl_format``                          ``svg``       output image format (default is pdf for latex) ``{png, ps, pdf, svg}``
 ``repl_mpl_figsize``      ``:figsize:``      ``6.4, 4.8``  figure size in inches
 ``repl_mpl_facecolor``    ``:facecolor:``    ``white``     figure face color
 ``repl_mpl_edgecolor``    ``:edgecolor:``    ``white``     figure edge color 
-``repl_mpl_bbox``         ``:bbox:``         ``standard``  bounding box {tight, standard}
-``repl_mpl_pad_inches``   ``:pad_inches:``   ``0.1``       padding to be used, when bbox is set to 'tight'
+``repl_mpl_bbox``         ``:bbox:``         ``standard``  bounding box ``{tight, standard}``
+``repl_mpl_pad_inches``   ``:pad_inches:``   ``0.1``       padding to be used, when ``bbox`` is set to ``tight``
 ``repl_mpl_transparent``  ``:transparent:``  ``False``     whether figures are saved with a transparent
-``repl_mpl_rc_params``    ``:rc_params:``                  other rcParams options
+``repl_mpl_rc_params``    ``:rc_params:``                  other ``rcParams`` options
 ========================  =================  ============  ===========
 
 Example of extension options in ``conf.py``:
