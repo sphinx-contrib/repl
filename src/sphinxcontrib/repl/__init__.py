@@ -247,8 +247,7 @@ def kill_all(*_):
     repl_procs.clear()
 
 
-def create_image(document, line):
-    # TODO : support image options
+def create_image(document, line, image_options):
     imgpath = line[10:]
     confdir = document.settings.env.app.confdir  # source root
     rst_file = document.attributes["source"]  # source file path
@@ -258,14 +257,15 @@ def create_image(document, line):
     )
     img_relpath = os.path.relpath(imgpath, rst_outdir)
     uri = directives.uri(img_relpath.replace("\\", "/"))
-    return nodes.image(line, uri=uri)
+    return nodes.image(line, uri=uri, **image_options)
 
 
-def create_mpl_container_node(document, lines):
+def create_mpl_container_node(document, lines, options):
+    image_options = {k[6:]: v for k, v in options.items() if k.startswith("image_")}
     return nodes.container(
         "",
         *(
-            create_image(document, line)
+            create_image(document, line, image_options)
             for line in lines
             if line.startswith("#repl:img:")
         ),
@@ -368,6 +368,7 @@ class REPL(Directive):
         "hide-input": _option_boolean,
         "hide-output": _option_boolean,
         **create_mpl_option_spec(),
+        **create_image_option_spec(),
     }
 
     def run(self):
@@ -403,7 +404,9 @@ class REPL(Directive):
         def to_node(block):
             if block[0].startswith("#repl:img:"):
                 # generated new image
-                return create_mpl_container_node(self.state_machine.document, lines)
+                return create_mpl_container_node(
+                    self.state_machine.document, lines, self.options
+                )
             else:
                 s = "\n".join(block)
                 return nodes.doctest_block(s, s, language="python")
@@ -415,7 +418,7 @@ class REPL_Quiet(Directive):
     has_content = True
     required_arguments = 0
     optional_arguments = 0
-    option_spec = create_mpl_option_spec()
+    option_spec = {**create_mpl_option_spec(), **create_image_option_spec()}
 
     def run(self):
         # dump the content on REPL & ignore what's printed on the interpreter
@@ -430,7 +433,9 @@ class REPL_Quiet(Directive):
         lines = proc.communicate(self.content, show_input=False, show_output=False)
 
         # only return the image lines
-        return [create_mpl_container_node(self.state_machine.document, lines)]
+        return [
+            create_mpl_container_node(self.state_machine.document, lines, self.options)
+        ]
 
 
 def mpl_init(app, config):
