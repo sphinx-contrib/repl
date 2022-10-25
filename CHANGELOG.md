@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [Unreleased]
 
+## [0.2.0] - 2022-10-25
+
+### Added
+
+- `image_*` directive options added
+
+### Changed
+
+- Renamed Matplotlib directive options by adding the prefix `mpl_`
+
 ## [0.2.0] - 2022-10-24
 
 ### Added
@@ -24,6 +34,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - First release
 
-[unreleased]: https://github.com/sphinx-contrib/repl/compare/v0.2.0...HEAD
+[unreleased]: https://github.com/sphinx-contrib/repl/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/sphinx-contrib/repl/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/sphinx-contrib/repl/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/sphinx-contrib/repl/compare/aa188e...v0.1.0

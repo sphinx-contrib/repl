@@ -7,7 +7,7 @@ from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 from docutils.parsers.rst.directives.images import Image
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 
 def _option_boolean(arg):
