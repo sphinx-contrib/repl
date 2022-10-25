@@ -260,6 +260,15 @@ def create_image(document, line):
     return nodes.image(line, uri=uri)
 
 
+def create_mpl_container_node(document, lines):
+    return nodes.container(
+        "",
+        *(
+            create_image(document, line)
+            for line in lines
+            if line.startswith("#repl:img:")
+        ),
+    )
 
 
 # TODO : add following options to Directives
@@ -381,13 +390,7 @@ class REPL(Directive):
         def to_node(block):
             if block[0].startswith("#repl:img:"):
                 # generated new image
-                return nodes.container(
-                    "",
-                    *(
-                        create_image(self.state_machine.document, line)
-                        for line in block
-                    ),
-                )
+                return create_mpl_container_node(self.state_machine.document, lines)
             else:
                 s = "\n".join(block)
                 return nodes.doctest_block(s, s, language="python")
@@ -414,16 +417,7 @@ class REPL_Quiet(Directive):
         lines = proc.communicate(self.content, show_input=False, show_output=False)
 
         # only return the image lines
-        return [
-            nodes.container(
-                "",
-                *(
-                    create_image(self.state_machine.document, line)
-                    for line in lines
-                    if line.startswith("#repl:img:")
-                ),
-            )
-        ]
+        return [create_mpl_container_node(self.state_machine.document, lines)]
 
 
 def mpl_init(app, config):
