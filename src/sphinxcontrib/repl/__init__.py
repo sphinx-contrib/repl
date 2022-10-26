@@ -274,12 +274,12 @@ def create_mpl_container_node(document, lines, options):
 
 def create_image_option_spec():
     return {
-        "image_alt": directives.unchanged,
-        "image_height": directives.length_or_unitless,
-        "image_width": directives.length_or_percentage_or_unitless,
-        "image_scale": directives.nonnegative_int,
-        "image_align": Image.align,
-        "image_class": directives.class_option,
+        "image-alt": directives.unchanged,
+        "image-height": directives.length_or_unitless,
+        "image-width": directives.length_or_percentage_or_unitless,
+        "image-scale": directives.nonnegative_int,
+        "image-align": Image.align,
+        "image-class": directives.class_option,
     }
 
 

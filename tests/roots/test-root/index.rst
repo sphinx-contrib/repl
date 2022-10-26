@@ -54,7 +54,7 @@ With ``repl-quiet`` directive, only the plotted figures are shown:
    :mpl-pad-inches:  0.1
    :mpl-transparent:  False
    :mpl-rc-params:  {"lines.marker": "x", "lines.markersize": 3}
-   :image_width: 50%
+   :image-width: 50%
    
    plt.plot(np.random.randn(100))
    plt.title('plotted in repl-quiet')
