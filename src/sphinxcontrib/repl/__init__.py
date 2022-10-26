@@ -202,7 +202,7 @@ def init_mpl(proc, app, format):
     img_dir = get_imgs_dir(app)
     os.makedirs(img_dir, exist_ok=True)
 
-    img_prefix = os.path.join(img_dir, f"mpl_").replace(".", "-")
+    img_prefix = os.path.join(img_dir, f"mpl-").replace(".", "-")
 
     if format is None:
         # auto-detect based on the builder's supported type
@@ -296,15 +296,15 @@ def create_mpl_option_spec():
         _error = _raise
 
     return {
-        "mpl_figsize": _error
+        "mpl-figsize": _error
         or rcsetup._listify_validator(rcsetup.validate_float, n=2),
-        "mpl_dpi": _error or rcsetup.validate_dpi,
-        "mpl_facecolor": _error or rcsetup.validate_color,
-        "mpl_edgecolor": _error or rcsetup.validate_color,
-        "mpl_bbox": _error or rcsetup.validate_bbox,
-        "mpl_pad_inches": _error or rcsetup.validate_float,
-        "mpl_transparent": _error or rcsetup.validate_bool,
-        "mpl_rc_params": _error or _validate_json_dict,
+        "mpl-dpi": _error or rcsetup.validate_dpi,
+        "mpl-facecolor": _error or rcsetup.validate_color,
+        "mpl-edgecolor": _error or rcsetup.validate_color,
+        "mpl-bbox": _error or rcsetup.validate_bbox,
+        "mpl-pad-inches": _error or rcsetup.validate_float,
+        "mpl-transparent": _error or rcsetup.validate_bool,
+        "mpl-rc-params": _error or _validate_json_dict,
     }
 
 
@@ -313,13 +313,13 @@ def modify_mpl_rcparams(proc, options):
     lines = ["import matplotlib as _mpl"]
 
     # write rc_params options
-    for k, v in options.get("mpl_rc_params", {}).items():
+    for k, v in options.get("mpl-rc-params", {}).items():
         if isinstance(v, str):
             v = f"'{v}'"
         lines.append(f"_mpl.rcParams['{k}']={v}")
 
     # figure size option needs to be converted from tuple to
-    v = options.get("mpl_figsize", None)
+    v = options.get("mpl-figsize", None)
     if v is not None:
         lines.append(f"_mpl.rcParams['figure.figsize']={v}")
 
@@ -332,7 +332,7 @@ def modify_mpl_rcparams(proc, options):
         "savefig.pad_inches",
         "savefig.transparent",
     ]:
-        value = options.get(f'mpl_{key.split(".", 1)[-1]}', None)
+        value = options.get(f'mpl-{key.split(".", 1)[-1].replace("_","-")}', None)
         if value is not None:
             if isinstance(value, str):
                 value = f"'{value}'"

@@ -47,13 +47,13 @@ Note that the indented code block does not need trailing empty line.
 With ``repl-quiet`` directive, only the plotted figures are shown:
 
 .. repl-quiet::
-   :mpl_figsize: 6, 4
-   :mpl_facecolor: orange
-   :mpl_edgecolor: red
-   :mpl_bbox: standard
-   :mpl_pad_inches:  0.1
-   :mpl_transparent:  False
-   :mpl_rc_params:  {"lines.marker": "x", "lines.markersize": 3}
+   :mpl-figsize: 6, 4
+   :mpl-facecolor: orange
+   :mpl-edgecolor: red
+   :mpl-bbox: standard
+   :mpl-pad-inches:  0.1
+   :mpl-transparent:  False
+   :mpl-rc-params:  {"lines.marker": "x", "lines.markersize": 3}
    :image_width: 50%
    
    plt.plot(np.random.randn(100))
