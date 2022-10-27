@@ -247,7 +247,7 @@ def kill_all(*_):
     repl_procs.clear()
 
 
-def create_image(document, line, image_options):
+def create_image_node(document, line, image_options):
     imgpath = line[10:]
     confdir = document.settings.env.app.confdir  # source root
     rst_file = document.attributes["source"]  # source file path
@@ -264,7 +264,7 @@ def create_mpl_container_node(document, lines, options):
     image_options = {k[6:]: v for k, v in options.items() if k.startswith("image-")}
     return nodes.container(
         "",
-        *(create_image(document, line, image_options) for line in lines),
+        *(create_image_node(document, line, image_options) for line in lines),
     )
 
 
@@ -287,7 +287,7 @@ def create_mpl_table_node(document, lines, options):
     # add rows
     row = nodes.row()
     for line in lines:
-        row.append(nodes.entry("", create_image(document, line, image_options)))
+        row.append(nodes.entry("", create_image_node(document, line, image_options)))
         if len(row) == ncols:
             tbody.append(row)
             row = nodes.row()
