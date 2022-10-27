@@ -14,10 +14,10 @@ def test(app, shared_result):
 #      # latex builder is chosen here.
 #      app.build()
 
-# @pytest.mark.sphinx(testroot='case1')
-# def test_case1(app):
-#     # app is Sphinx application for case1 sphinx project (`tests/roots/test-case1`)
-#     app.build()
+@pytest.mark.sphinx(testroot='tabular')
+def test_tabular(app):
+    # app is Sphinx application for case1 sphinx project (`tests/roots/test-case1`)
+    app.build()
 
 # @pytest.mark.sphinx(confoverrides={'master_doc': 'content'})
 # def test_confoverrides(app):

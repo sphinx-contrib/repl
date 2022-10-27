@@ -268,6 +268,45 @@ def create_mpl_container_node(document, lines, options):
     )
 
 
+def create_mpl_table_node(document, lines, options):
+    image_options = {k[6:]: v for k, v in options.items() if k.startswith("image-")}
+    ncols = options["table-ncols"]
+
+    table = nodes.table()
+    tgroup = nodes.tgroup()
+    table.append(tgroup)
+
+    # create column specs
+    for _ in range(ncols):
+        tgroup.append(nodes.colspec())
+
+    # create table body
+    tbody = nodes.tbody(cols=ncols)
+    tgroup.append(tbody)
+
+    # add rows
+    row = nodes.row()
+    for line in lines:
+        row.append(nodes.entry("", create_image(document, line, image_options)))
+        if len(row) == ncols:
+            tbody.append(row)
+            row = nodes.row()
+    if len(row):
+        # fill the row with empty cells
+        while len(row) == ncols:
+            row.append(nodes.entry())
+        tbody.append(row)
+
+    return table
+
+    # option_spec = {'class': directives.class_option,
+    #                'name': directives.unchanged,
+    #                'align': align,
+    #                'width': directives.length_or_percentage_or_unitless,
+    #                'widths': directives.value_or(('auto', 'grid'),
+    #                                              directives.positive_int_list)}
+
+
 def create_image_option_spec():
     return {
         "image-alt": directives.unchanged,
@@ -276,6 +315,7 @@ def create_image_option_spec():
         "image-scale": directives.nonnegative_int,
         "image-align": Image.align,
         "image-class": directives.class_option,
+        "table-ncols": directives.nonnegative_int,
     }
 
 
@@ -385,9 +425,11 @@ class REPL(Directive):
         def to_node(block):
             if block[0].startswith("#repl:img:"):
                 # generated new image
-                return create_mpl_container_node(
-                    self.state_machine.document, block, self.options
-                )
+                return (
+                    create_mpl_table_node
+                    if self.options.get("table-ncols", 0)
+                    else create_mpl_container_node
+                )(self.state_machine.document, block, self.options)
             else:
                 s = "\n".join(block)
                 return nodes.doctest_block(s, s, language="python")
@@ -415,7 +457,11 @@ class REPL_Quiet(Directive):
 
         # only return the image lines
         return [
-            create_mpl_container_node(self.state_machine.document, lines, self.options)
+            (
+                create_mpl_table_node
+                if self.options.get("table-ncols", 0)
+                else create_mpl_container_node
+            )(self.state_machine.document, lines, self.options)
         ]
 
 
