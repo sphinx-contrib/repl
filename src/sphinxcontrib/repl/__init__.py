@@ -268,7 +268,7 @@ def create_mpl_container_node(document, lines, options):
     )
 
 
-def create_mpl_table_node(document, lines, options):
+def create_table_node(document, lines, options):
     image_options = {k[6:]: v for k, v in options.items() if k.startswith("image-")}
     ncols = options["table-ncols"]
 
@@ -426,7 +426,7 @@ class REPL(Directive):
             if block[0].startswith("#repl:img:"):
                 # generated new image
                 return (
-                    create_mpl_table_node
+                    create_table_node
                     if self.options.get("table-ncols", 0)
                     else create_mpl_container_node
                 )(self.state_machine.document, block, self.options)
@@ -458,7 +458,7 @@ class REPL_Quiet(Directive):
         # only return the image lines
         return [
             (
-                create_mpl_table_node
+                create_table_node
                 if self.options.get("table-ncols", 0)
                 else create_mpl_container_node
             )(self.state_machine.document, lines, self.options)
