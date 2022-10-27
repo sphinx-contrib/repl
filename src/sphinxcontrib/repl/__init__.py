@@ -261,14 +261,10 @@ def create_image(document, line, image_options):
 
 
 def create_mpl_container_node(document, lines, options):
-    image_options = {k[6:]: v for k, v in options.items() if k.startswith("image_")}
+    image_options = {k[6:]: v for k, v in options.items() if k.startswith("image-")}
     return nodes.container(
         "",
-        *(
-            create_image(document, line, image_options)
-            for line in lines
-            if line.startswith("#repl:img:")
-        ),
+        *(create_image(document, line, image_options) for line in lines),
     )
 
 
@@ -390,7 +386,7 @@ class REPL(Directive):
             if block[0].startswith("#repl:img:"):
                 # generated new image
                 return create_mpl_container_node(
-                    self.state_machine.document, lines, self.options
+                    self.state_machine.document, block, self.options
                 )
             else:
                 s = "\n".join(block)
