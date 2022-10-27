@@ -392,7 +392,7 @@ class REPL(Directive):
                 s = "\n".join(block)
                 return nodes.doctest_block(s, s, language="python")
 
-        return [to_node(blk) for blk in blocks]
+        return [to_node(blk) for blk in blocks if len(blk)]
 
 
 class REPL_Quiet(Directive):
