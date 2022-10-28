@@ -6,6 +6,7 @@ import subprocess as sp
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 from docutils.parsers.rst.directives.images import Image
+from docutils.parsers.rst.directives.tables import align
 
 __version__ = "0.3.0"
 
@@ -269,13 +270,41 @@ def create_container_node(document, content_nodes, options):
 
 def create_table_node(document, cell_nodes, options):
     ncols = options["table-ncols"]
+    widths = options.get("table-width", None)
+
+    if isinstance(widths, list) and len(widths):
+        if len(widths) < ncols:
+            # extend if not enough widths given
+            widths += [widths[-1]] * (ncols - len(widths))
+        col_widths = widths[:ncols]
+    else:
+        col_widths = [100 // ncols] * ncols
 
     table = nodes.table()
+
+    table["classes"] += options.get("table-class", [])
+    if widths == "auto":
+        table["classes"] += ["colwidths-auto"]
+    elif widths:  # explicitly set column widths
+        table["classes"] += ["colwidths-given"]
+    if "table-width" in options:
+        table["width"] = options.get("table-width")
+    if "table-align" in options:
+        table["align"] = options.get("table-align")
+
     tgroup = nodes.tgroup()
     table.append(tgroup)
 
+    # NOT RECOGNIZED BY DOCUTILS
+    # if not options.get("table-border", False):
+    #     tgroup["colsep"] = 0
+    #     tgroup["rowsep"] = 0
+
     # create column specs
-    for _ in range(ncols):
+    for col_width in col_widths:
+        colspec = nodes.colspec()
+        if col_width is not None:
+            colspec.attributes["colwidth"] = col_width
         tgroup.append(nodes.colspec())
 
     # create table body
@@ -314,6 +343,18 @@ def create_mpl_node(document, files, options):
     )(document, image_iter, options)
 
 
+def create_table_option_spec():
+    return {
+        "table-ncols": directives.nonnegative_int,
+        "table-class": directives.class_option,
+        "table-align": align,
+        "table-width": directives.length_or_percentage_or_unitless,
+        "table-widths": directives.value_or(
+            ("auto", "grid"), directives.positive_int_list
+        ),
+    }
+
+
 def create_image_option_spec():
     return {
         "image-alt": directives.unchanged,
@@ -322,7 +363,6 @@ def create_image_option_spec():
         "image-scale": directives.nonnegative_int,
         "image-align": Image.align,
         "image-class": directives.class_option,
-        "table-ncols": directives.nonnegative_int,
     }
 
 
@@ -397,6 +437,7 @@ class REPL(Directive):
         "hide-output": _option_boolean,
         **create_mpl_option_spec(),
         **create_image_option_spec(),
+        **create_table_option_spec(),
     }
 
     def run(self):
@@ -444,7 +485,11 @@ class REPL_Quiet(Directive):
     has_content = True
     required_arguments = 0
     optional_arguments = 0
-    option_spec = {**create_mpl_option_spec(), **create_image_option_spec()}
+    option_spec = {
+        **create_mpl_option_spec(),
+        **create_image_option_spec(),
+        **create_table_option_spec(),
+    }
 
     def run(self):
         # dump the content on REPL & ignore what's printed on the interpreter
