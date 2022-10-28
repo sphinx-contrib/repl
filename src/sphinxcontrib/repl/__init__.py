@@ -8,7 +8,7 @@ from docutils.parsers.rst import Directive, directives
 from docutils.parsers.rst.directives.images import Image
 from docutils.parsers.rst.directives.tables import align
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 
 def _option_boolean(arg):
