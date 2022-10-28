@@ -247,7 +247,10 @@ def kill_all(*_):
     repl_procs.clear()
 
 
-def create_image_node(document, line, image_options):
+def create_image_node(document, line, options):
+
+    image_options = {k[6:]: v for k, v in options.items() if k.startswith("image-")}
+
     imgpath = line[10:]
     confdir = document.settings.env.app.confdir  # source root
     rst_file = document.attributes["source"]  # source file path
@@ -260,16 +263,11 @@ def create_image_node(document, line, image_options):
     return nodes.image(line, uri=uri, **image_options)
 
 
-def create_container_node(document, lines, options):
-    image_options = {k[6:]: v for k, v in options.items() if k.startswith("image-")}
-    return nodes.container(
-        "",
-        *(create_image_node(document, line, image_options) for line in lines),
-    )
+def create_container_node(document, content_nodes, options):
+    return nodes.container("", *content_nodes)
 
 
-def create_table_node(document, lines, options):
-    image_options = {k[6:]: v for k, v in options.items() if k.startswith("image-")}
+def create_table_node(document, cell_nodes, options):
     ncols = options["table-ncols"]
 
     table = nodes.table()
@@ -286,8 +284,8 @@ def create_table_node(document, lines, options):
 
     # add rows
     row = nodes.row()
-    for line in lines:
-        row.append(nodes.entry("", create_image_node(document, line, image_options)))
+    for node in cell_nodes:
+        row.append(nodes.entry("", node))
         if len(row) == ncols:
             tbody.append(row)
             row = nodes.row()
@@ -309,9 +307,11 @@ def create_table_node(document, lines, options):
 
 def create_mpl_node(document, files, options):
 
+    image_iter = (create_image_node(document, file, options) for file in files)
+
     return (
         create_table_node if options.get("table-ncols", 0) else create_container_node
-    )(document, files, options)
+    )(document, image_iter, options)
 
 
 def create_image_option_spec():
