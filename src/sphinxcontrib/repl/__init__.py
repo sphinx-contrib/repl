@@ -307,6 +307,13 @@ def create_table_node(document, lines, options):
     #                                              directives.positive_int_list)}
 
 
+def create_mpl_node(document, files, options):
+
+    return (
+        create_table_node if options.get("table-ncols", 0) else create_container_node
+    )(document, files, options)
+
+
 def create_image_option_spec():
     return {
         "image-alt": directives.unchanged,
@@ -425,11 +432,7 @@ class REPL(Directive):
         def to_node(block):
             if block[0].startswith("#repl:img:"):
                 # generated new image
-                return (
-                    create_table_node
-                    if self.options.get("table-ncols", 0)
-                    else create_container_node
-                )(self.state_machine.document, block, self.options)
+                return create_mpl_node(self.state_machine.document, block, self.options)
             else:
                 s = "\n".join(block)
                 return nodes.doctest_block(s, s, language="python")
@@ -456,13 +459,7 @@ class REPL_Quiet(Directive):
         lines = proc.communicate(self.content, show_input=False, show_output=False)
 
         # only return the image lines
-        return [
-            (
-                create_table_node
-                if self.options.get("table-ncols", 0)
-                else create_container_node
-            )(self.state_machine.document, lines, self.options)
-        ]
+        return [create_mpl_node(self.state_machine.document, lines, self.options)]
 
 
 def mpl_init(app, config):
