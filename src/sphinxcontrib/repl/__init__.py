@@ -515,6 +515,9 @@ def mpl_init(app, config):
         # nothing to do
         return
 
+    # make sure directory exists
+    os.makedirs(app.doctreedir, exist_ok=True)
+
     # create matplot default param
     file = os.path.join(app.doctreedir, "matplotlibrc")
     with open(file, "wt") as f:
