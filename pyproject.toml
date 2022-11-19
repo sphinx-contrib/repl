@@ -32,7 +32,7 @@ PullRequests = "https://github.com/sphinx-contrib/repl/pulls"
 mpl = ["matplotlib"]
 
 [build-system]
-requires = ["setuptools >= 40.9.0", "wheel"]
+requires = ["setuptools >= 61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
