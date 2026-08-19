@@ -2,6 +2,7 @@ import pytest
 
 # see https://github.com/sphinx-doc/sphinx/issues/7008
 
+
 def test(app, shared_result):
     # app is a Sphinx application object for default sphinx project (`tests/roots/test-root`).
     written = []
@@ -9,15 +10,30 @@ def test(app, shared_result):
     app.build()
     print(written)
 
+
 # @pytest.mark.sphinx(buildername='latex')
 # def test_latex(app):
 #      # latex builder is chosen here.
 #      app.build()
 
-@pytest.mark.sphinx(testroot='tabular')
+
+@pytest.mark.sphinx(testroot="tabular")
 def test_tabular(app):
     # app is Sphinx application for case1 sphinx project (`tests/roots/test-case1`)
     app.build()
+
+
+# @pytest.mark.sphinx(confoverrides={'master_doc': 'content'})
+# def test_confoverrides(app):
+#     # a Sphinx application configured with given setting
+#     app.build()
+
+
+@pytest.mark.sphinx(testroot="ffmpegio")
+def test_ffmpegio(app):
+    # app is Sphinx application for case1 sphinx project (`tests/roots/test-case1`)
+    app.build()
+
 
 # @pytest.mark.sphinx(confoverrides={'master_doc': 'content'})
 # def test_confoverrides(app):

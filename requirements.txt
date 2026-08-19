@@ -2,3 +2,5 @@ sphinx
 -e .
 pytest
 matplotlib
+
+git+https://github.com/python-ffmpegio/python-ffmpegio.git
